@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produccion - Pro Mec</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #c4bdbc;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        .tabla-inventario {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            overflow-x: auto;
+        }
+
+        .tabla-inventario h2 {
+            color: #ff0000;
+        }
+
+        .agregar-insumo {
+            background-color: #f4f4f4;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .btn-redondeado,
+        .btn-eliminar,
+        .btn-actualizar,
+        .btn-insertar,
+        .btn-volver {
+            border-radius: 50px;
+            background-color: #ff0000;
+            color: #ffffff;
+            margin-top: 10px;
+        }
+
+        .btn-redondeado:hover,
+        .btn-eliminar:hover,
+        .btn-actualizar:hover,
+        .btn-insertar:hover,
+        .btn-volver:hover {
+            background-color: #ff3333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="tabla-inventario">
+                    <h2 class="text-center mb-4">Produccion</h2>
+                    <div class="table-responsive" id="tablaProduccion">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Tipo de Produccion</th>
+                                    <th>Fecha de Elaboracion</th>
+                                    <th>Tipo de Producto</th>
+                                    <th>Detalles del Producto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <a href="Index(Administrador).html" class="btn btn-volver btn-block mt-3">Volver al Inicio</a>
+                </div>
+                <div class="agregar-insumo">
+                    <h3 class="text-center mb-4">Agregar Produccion</h3>
+                    <form id="formularioProduccion">
+                        <div class="form-group">
+                            <label for="tipoProduccion">Tipo de Produccion:</label>
+                            <select class="form-control" id="tipoProduccion" name="tipoProduccion" required>
+                                <option value="Elaboracion">Elaboracion</option>
+                                <option value="Mantenimiento">Mantenimiento</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="fechaElaboracion">Fecha de Elaboracion:</label>
+                            <input type="date" class="form-control" id="fechaElaboracion" name="fechaElaboracion"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipoProducto">Tipo de Producto:</label>
+                            <input type="text" class="form-control" id="tipoProducto" name="tipoProducto" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="detallesProducto">Detalles del Producto:</label>
+                            <textarea class="form-control" id="detallesProducto" name="detallesProducto"
+                                required></textarea>
+                        </div>
+                    </form>
+                    <button type="button" class="btn btn-insertar btn-block" onclick="insertarDatos()">Insertar</button>
+                </div>
+                <div class="eliminar-insumo">
+                    <h3 class="text-center mb-4">Eliminar/Actualizar Orden de Produccion</h3>
+                    <form>
+                        <div class="form-group">
+                            <label for="eliminarProducto">Seleccionar Orden de Produccion:</label>
+                            <select class="form-control" id="eliminarProducto" name="eliminarProducto" required>
+                                <option value="">Seleccionar...</option>
+                                <!-- Las opciones se llenarán dinámicamente con JavaScript -->
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-eliminar btn-block" onclick="eliminarDatos()">Eliminar
+                        </button>
+                        <button type="button" class="btn btn-actualizar btn-block"
+                            onclick="actualizarOrdenProduccion()">
+                            Actualizar Orden de Produccion</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+    <script>
+
+        var tablasProduccion = [];
+
+        function insertarDatos() {
+            // Obtener datos del formulario
+            var tipoProduccion = document.getElementById("tipoProduccion").value;
+            var fechaElaboracion = document.getElementById("fechaElaboracion").value;
+            var tipoProducto = document.getElementById("tipoProducto").value;
+            var detallesProducto = document.getElementById("detallesProducto").value;
+
+            // Obtener la tabla y agregar la nueva fila
+            var tablaProduccion = document.getElementById("tablaProduccion").querySelector("tbody");
+            var nuevaFila =
+                "<tr><td>" + tipoProduccion + "</td><td>" + fechaElaboracion + "</td><td>" +
+                tipoProducto + "</td><td>" + detallesProducto + "</td></tr>";
+            tablaProduccion.innerHTML += nuevaFila;
+
+            // Limpiar el formulario
+            document.getElementById("formularioProduccion").reset();
+
+            // Actualizar registro de tablas
+            tablasProduccion.push({
+                tipoProduccion: tipoProduccion,
+                fechaElaboracion: fechaElaboracion,
+                tipoProducto: tipoProducto,
+                detallesProducto: detallesProducto
+            });
+
+            // Actualizar opciones de eliminar y actualizar
+            actualizarOpcionesEliminarActualizar();
+        }
+
+        function actualizarOpcionesEliminarActualizar() {
+            var selectEliminar = document.getElementById("eliminarProducto");
+
+            // Limpiar opciones existentes
+            selectEliminar.innerHTML = '<option value="">Seleccionar...</option>';
+
+            // Agregar nuevas opciones desde el registro de tablas
+            tablasProduccion.forEach(function (tabla, index) {
+                var nuevaOpcion = document.createElement("option");
+                nuevaOpcion.value = index.toString();
+                nuevaOpcion.text = "Tipo: " + tabla.tipoProduccion + ", Fecha: " + tabla.fechaElaboracion;
+
+                selectEliminar.add(nuevaOpcion);
+            });
+        }
+
+        function eliminarDatos() {
+            var selectEliminar = document.getElementById("eliminarProducto");
+            var indiceSeleccionado = selectEliminar.value;
+
+            if (indiceSeleccionado === "") {
+                alert("Selecciona un elemento para eliminar");
+                return;
+            }
+
+            // Eliminar la fila de la tabla
+            var tablaProduccion = document.getElementById("tablaProduccion").querySelector("tbody");
+            tablaProduccion.deleteRow(indiceSeleccionado);
+
+            // Eliminar el elemento del registro de tablas
+            var tablaEliminada = tablasProduccion.splice(indiceSeleccionado, 1)[0];
+
+            if (confirm("¿Estás seguro de que quieres eliminar '" + tablaEliminada.tipoProduccion + "'?")) {
+                alert("Elemento eliminado: " + tablaEliminada.tipoProduccion);
+
+                // Actualizar opciones de eliminar y actualizar después de eliminar
+                actualizarOpcionesEliminarActualizar();
+            }
+        }
+
+        function actualizarOrdenProduccion() {
+            var selectActualizar = document.getElementById("eliminarProducto");
+            var indiceSeleccionado = selectActualizar.value;
+
+            if (indiceSeleccionado === "") {
+                alert("Selecciona un elemento para actualizar");
+                return;
+            }
+
+            // Obtener datos actuales del registro seleccionado
+            var tablaActual = tablasProduccion[indiceSeleccionado];
+
+            // Llenar el formulario con los datos actuales
+            document.getElementById("tipoProduccion").value = tablaActual.tipoProduccion;
+            document.getElementById("fechaElaboracion").value = tablaActual.fechaElaboracion;
+            document.getElementById("tipoProducto").value = tablaActual.tipoProducto;
+            document.getElementById("detallesProducto").value = tablaActual.detallesProducto;
+
+            // Eliminar la fila de la tabla
+            var tablaProduccion = document.getElementById("tablaProduccion").querySelector("tbody");
+            tablaProduccion.deleteRow(indiceSeleccionado);
+
+            // Eliminar el elemento del registro de tablas
+            tablasProduccion.splice(indiceSeleccionado, 1);
+
+            // Actualizar opciones de eliminar y actualizar después de eliminar
+            actualizarOpcionesEliminarActualizar();
+        }
+        function filtrarTabla(criterios) {
+  var filasFiltradas = [];
+  tablasProduccion.forEach(function (tabla) {
+    if (
+      !criterios.tipoProduccion ||
+      criterios.tipoProduccion === tabla.tipoProduccion
+    ) {
+      if (
+        !criterios.fechaElaboracion ||
+        new Date(criterios.fechaElaboracion) <= new Date(tabla.fechaElaboracion)
+      ) {
+        // Agregar otras condiciones para otros criterios...
+        filasFiltradas.push(tabla);
+      }
+    }
+  });
+
+  // Actualizar la tabla con las filas filtradas
+  var tablaProduccion = document.getElementById("tablaProduccion").querySelector("tbody");
+  tablaProduccion.innerHTML = "";
+  filasFiltradas.forEach(function (tabla) {
+    var nuevaFila =
+      "<tr><td>" +
+      tabla.tipoProduccion +
+      "</td><td>" +
+      tabla.fechaElaboracion +
+      "</td><td>" +
+      tabla.tipoProducto +
+      "</td><td>" +
+      tabla.detallesProducto +
+      "</td></tr>";
+    tablaProduccion.innerHTML += nuevaFila;
+  });
+}
+
+// Evento de cambio del formulario de filtros
+var formularioFiltros = document.getElementById("formularioFiltros");
+formularioFiltros.addEventListener("submit", function (event) {
+  event.preventDefault();
+  var criterios = {
+    tipoProduccion: document.getElementById("filtroTipoProduccion").value,
+    fechaElaboracion: document.getElementById("filtroFechaElaboracion").value,
+    // Agregar otros criterios...
+  };
+  filtrarTabla(criterios);
+});
+
+// Botón para resetear los filtros
+var botonReset = document.getElementById("botonReset");
+botonReset.addEventListener("click", function () {
+  filtrarTabla({});
+});
+
+    </script>
+</body>
+
+</html>
