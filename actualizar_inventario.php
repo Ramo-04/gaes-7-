@@ -79,7 +79,7 @@
         $precio_salida = $_POST['precio_salida'];
         $producto = $_POST['producto'];
 
-        $sql = "UPDATE INVENTARIO SET cantidad_inventario_stock='$cantidad_stock', entrada_inventario='$entrada_inventario', precio_entrada='$precio_entrada', salida_inventario='$salida_inventario', precio_salida='$precio_salida', producto='$producto' WHERE id_inventario=$id_inventario";
+        $sql = "UPDATE INVENTARIO SET entrada_inventario='$entrada_inventario', precio_entrada='$precio_entrada', salida_inventario='$salida_inventario', precio_salida='$precio_salida', producto='$producto' WHERE id_inventario=$id_inventario";
 
         $resultado = mysqli_query($conn, $sql);
 
@@ -97,23 +97,22 @@
     } else {
     ?>
         <div class="container">
-            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-                <input type="hidden" name="id_inventario" value="<?php echo $inventario['id_inventario']; ?>">
-                <label>Cantidad en Stock:</label>
-                <input type="text" name="cantidad_stock" class="form-control" value="<?php echo $inventario['cantidad_inventario_stock']; ?>">
-                <label>Entrada Inventario:</label>
-                <input type="text" name="entrada_inventario" class="form-control" value="<?php echo $inventario['entrada_inventario']; ?>">
-                <label>Precio Entrada:</label>
-                <input type="text" name="precio_entrada" class="form-control" value="<?php echo $inventario['precio_entrada']; ?>">
-                <label>Salida Inventario:</label>
-                <input type="text" name="salida_inventario" class="form-control" value="<?php echo $inventario['salida_inventario']; ?>">
-                <label>Precio Salida:</label>
-                <input type="text" name="precio_salida" class="form-control" value="<?php echo $inventario['precio_salida']; ?>">
-                <label>Producto:</label>
-                <input type="text" name="producto" class="form-control" value="<?php echo $inventario['producto']; ?>">
-                <input type="submit" name="enviar" value="ACTUALIZAR" class="btn btn-primary btn-block">
-                <a href="inventario.php" class="btn btn-secondary btn-block">Regresar</a>
-            </form>
+        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+        <label >Id Inventario: </label>
+        <input type="text" name="id_inventario" value="<?php echo isset($inventario['id_inventario']) ? $inventario['id_inventario'] : ''; ?>" readonly>
+        <label>Entrada Inventario: </label>
+        <input type="text" name="entrada_inventario" class="form-control" value="<?php echo isset($inventario['entrada_inventario']) ? $inventario['entrada_inventario'] : ''; ?>">
+        <label>Precio Entrada:</label>
+        <input type="text" name="precio_entrada" class="form-control" value="<?php echo isset($inventario['precio_entrada']) ? $inventario['precio_entrada'] : ''; ?>">
+        <label>Salida Inventario:</label>
+        <input type="text" name="salida_inventario" class="form-control" value="<?php echo isset($inventario['salida_inventario']) ? $inventario['salida_inventario'] : ''; ?>">
+        <label>Precio Salida:</label>
+        <input type="text" name="precio_salida" class="form-control" value="<?php echo isset($inventario['precio_salida']) ? $inventario['precio_salida'] : ''; ?>">
+        <label>Producto:</label>
+        <input type="text" name="producto" class="form-control" value="<?php echo isset($inventario['producto']) ? $inventario['producto'] : ''; ?>">
+        <input type="submit" name="enviar" value="ACTUALIZAR" class="btn btn-primary btn-block">
+        <a href="inventario.php" class="btn btn-secondary btn-block">Regresar</a>
+    </form>
         </div>
     <?php
     }
