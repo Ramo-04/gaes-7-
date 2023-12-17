@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agregar Servicio</title>
+    <title>Actualizar Inventario</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <style>
         body {
@@ -61,27 +61,36 @@
 
 <body>
     <?php
+    include("conexion.php");
+
+    if (isset($_GET['id_inventario'])) {
+        $id_inventario = $_GET['id_inventario'];
+        $sql = "SELECT * FROM INVENTARIO WHERE id_inventario = $id_inventario";
+        $resultado = mysqli_query($conn, $sql);
+        $inventario = mysqli_fetch_assoc($resultado);
+    }
+
     if (isset($_POST['enviar'])) {
-        $producto = $_POST['nombre_servicio'];
-        $descripcionServicio = $_POST['descripcion_servicio'];
-        $calidadServicio = $_POST['calidad_servicio'];
-        $idEmpleado = $_POST['id_empleado'];
-        $duracionServicio = $_POST['duracion_servicio'];
+        $id_inventario = $_POST['id_inventario'];
+        $cantidad_stock = $_POST['cantidad_stock'];
+        $entrada_inventario = $_POST['entrada_inventario'];
+        $precio_entrada = $_POST['precio_entrada'];
+        $salida_inventario = $_POST['salida_inventario'];
+        $precio_salida = $_POST['precio_salida'];
+        $producto = $_POST['producto'];
 
-        include("conexion.php");
-
-        $sql = "INSERT INTO SERVICIO (nombre_servicio, descripcion_servicio, calidad_servicio, id_empleado, duracion_servicio) VALUES ('$producto', '$descripcionServicio', '$calidadServicio', '$idEmpleado', '$duracionServicio')";
+        $sql = "UPDATE INVENTARIO SET cantidad_inventario_stock='$cantidad_stock', entrada_inventario='$entrada_inventario', precio_entrada='$precio_entrada', salida_inventario='$salida_inventario', precio_salida='$precio_salida', producto='$producto' WHERE id_inventario=$id_inventario";
 
         $resultado = mysqli_query($conn, $sql);
 
         if ($resultado) {
             echo "<script language='JavaScript'>
-            alert('Los datos fueron ingresados correctamente a la BD');
-            location.assign('servicio.php')</script>";
+            alert('Los datos fueron actualizados correctamente en la BD');
+            location.assign('inventario.php')</script>";
         } else {
             echo "<script language='JavaScript'>
-            alert('ERROR: Los datos NO fueron ingresados correctamente a la BD');
-            location.assign('servicio.php')</script>";
+            alert('ERROR: Los datos NO fueron actualizados correctamente en la BD');
+            location.assign('inventario.php')</script>";
         }
 
         mysqli_close($conn);
@@ -89,18 +98,21 @@
     ?>
         <div class="container">
             <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-                <label>Nombre del Servicio:</label>
-                <input type="text" name="nombre_servicio" class="form-control">
-                <label>Descripción:</label>
-                <input type="text" name="descripcion_servicio" class="form-control">
-                <label>Calidad:</label>
-                <input type="text" name="calidad_servicio" class="form-control">
-                <label>ID empleado:</label>
-                <input type="text" name="id_empleado" class="form-control">
-                <label>Duración del Servicio:</label>
-                <input type="text" name="duracion_servicio" class="form-control">
-                <input type="submit" name="enviar" value="AGREGAR" class="btn btn-primary btn-block">
-                <a href="servicio.php" class="btn btn-secondary btn-block">Regresar</a>
+                <input type="hidden" name="id_inventario" value="<?php echo $inventario['id_inventario']; ?>">
+                <label>Cantidad en Stock:</label>
+                <input type="text" name="cantidad_stock" class="form-control" value="<?php echo $inventario['cantidad_inventario_stock']; ?>">
+                <label>Entrada Inventario:</label>
+                <input type="text" name="entrada_inventario" class="form-control" value="<?php echo $inventario['entrada_inventario']; ?>">
+                <label>Precio Entrada:</label>
+                <input type="text" name="precio_entrada" class="form-control" value="<?php echo $inventario['precio_entrada']; ?>">
+                <label>Salida Inventario:</label>
+                <input type="text" name="salida_inventario" class="form-control" value="<?php echo $inventario['salida_inventario']; ?>">
+                <label>Precio Salida:</label>
+                <input type="text" name="precio_salida" class="form-control" value="<?php echo $inventario['precio_salida']; ?>">
+                <label>Producto:</label>
+                <input type="text" name="producto" class="form-control" value="<?php echo $inventario['producto']; ?>">
+                <input type="submit" name="enviar" value="ACTUALIZAR" class="btn btn-primary btn-block">
+                <a href="inventario.php" class="btn btn-secondary btn-block">Regresar</a>
             </form>
         </div>
     <?php
