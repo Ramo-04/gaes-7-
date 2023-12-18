@@ -15,7 +15,7 @@ if ($conn->connect_error) {
 $usuario = $_POST['usuario'];
 $contrasena = $_POST['contrasena'];
 
-// Consulta para verificar el usuario
+
 $sql = "SELECT * FROM USUARIO 
         LEFT JOIN ROLES ON USUARIO.id_rol = ROLES.id_rol
         LEFT JOIN EMPLEADO ON ROLES.id_empleado = EMPLEADO.id_empleado

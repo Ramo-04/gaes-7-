@@ -168,6 +168,7 @@
           ?>
           <a href="agregar_inventario.php" class="btn btn-eliminar btn-block">Agregar Inventario</a>
           <a href="Index(Administrador).html" class="btn btn-volver btn-block mt-3">Volver al Inicio</a>
+          <a href="generar_pdf.php?producto=<?php echo $filtro_producto; ?>&entrada=<?php echo $filtro_entrada; ?>&salida=<?php echo $filtro_salida; ?>" target="_blank" class="btn btn-primary btn-block">Generar PDF</a>
         </div>
       </div>
     </div>
